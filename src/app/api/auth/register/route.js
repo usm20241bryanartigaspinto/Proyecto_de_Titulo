@@ -15,7 +15,7 @@ export async function POST(request) {
     if (userFound) {
       return NextResponse.json(
         {
-          message: "Email already exists",
+          message: "El correo ya está registrado",
         },
         {
           status: 400,
@@ -32,7 +32,7 @@ export async function POST(request) {
     if (usernameFound) {
       return NextResponse.json(
         {
-          message: "username already exists",
+          message: "El usuario ya existe",
         },
         {
           status: 400,

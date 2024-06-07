@@ -41,7 +41,7 @@ function LoginPage() {
 
         <h1 className="text-slate-200 font-bold text-4xl mb-4">Login</h1>
 
-        <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
+        <label htmlFor="email" className="text-gray-800  font-bold mb-2 block text-sm">
           Correo:
         </label>
         <input
@@ -52,7 +52,7 @@ function LoginPage() {
               message: "Ingrese su correo",
             },
           })}
-          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+          className="p-3 rounded block mb-2 bg-slate-900  text-slate-300 w-full"
           placeholder="correo@gmail.com"
         />
 
@@ -60,10 +60,10 @@ function LoginPage() {
           <span className="text-red-500 text-xs">{errors.email.message}</span>
         )}
 
-        <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
+        <label htmlFor="password" className="text-gray-800 font-bold mb-2 block text-sm">
           Contraseña:
         </label>
-        <input
+        <input 
           type="password"
           {...register("password", {
             required: {
@@ -71,12 +71,12 @@ function LoginPage() {
               message: "Ingresar la contraseña",
             },
           })}
-          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+          className="p-3 rounded block mb-2  bg-slate-900 text-slate-300 w-full"
           placeholder="******"
         />
 
         {errors.password && (
-          <span className="text-red-500 text-xs">
+          <span className="text-red-500 font-bold text-xs">
             {errors.password.message}
           </span>
         )}

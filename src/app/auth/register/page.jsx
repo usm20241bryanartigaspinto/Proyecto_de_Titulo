@@ -1,8 +1,12 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from 'react-responsive';
+
+
 
 function RegisterPage() {
+
   const {
     register,
     handleSubmit,
@@ -31,7 +35,6 @@ function RegisterPage() {
       router.push("/auth/login");
     }
   });
-
   console.log(errors);
 
   return (

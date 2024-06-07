@@ -2,24 +2,25 @@ import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+
 async function Navbar() {
   const session = await getServerSession(authOptions);
   console.log(session);
 
   return (
-    <nav className="flex justify-between items-center bg-gray-950 text-white px-24 py-3">
+    <nav className="flex justify-between items-center bg-yellow-300 text-white px-24 py-3">
       <h1 className="text-xl font-bold">Ayuda a la infancia🌟</h1>
 
       <ul className="flex gap-x-2">
         {!session?.user ? (
           <>
-            <li>
+            <li className="button">
               <Link href="/">Inicio</Link>
             </li>
-            <li>
+            <li className="button">
               <Link href="/auth/login">Login</Link>
             </li>
-            <li>
+            <li className="button">
               <Link href="/auth/register">Register</Link>
             </li>
           </>
