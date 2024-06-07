@@ -1,33 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+/* common_style section */
+.common_style>section {
+    padding: 50px 0;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  
+  .common_style .row {
+    align-items: auto;
   }
+
+  .common_style {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .common_style h3 {
+    font-weight: 600;
+    color: #151516;
+  }
+  
+  .common_style p {
+    font-weight: 600;
+    color: #ffffff;
+    margin: 30px 0 50px 0;
+  }
+  
+  .common_style img {
+    width: 100%;
+  }
+
+  /* about section */
+.about_section {
+    text-align: justify;
+  }
+  
+  .about_section a {
+    background-color: #6ebca8;
+    color: #fefeff;
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+        max-width: 1170px;
+    }
+
 }
+
+.body-bg {
+  @apply bg-customColor;
+}
+
+h1 {
+  color: rgb(255, 255, 255);
+}
+
