@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const DonationForm = ({ childrenId }) => {
-  const { data: session, status } = useSession();  // Agregamos `status` para verificar si la sesión está cargada
+  const { data: session, status } = useSession();
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -16,7 +16,7 @@ const DonationForm = ({ childrenId }) => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      setUserId(session?.user?.id);  // Asignamos el `user_id` cuando la sesión esté cargada
+      setUserId(session?.user?.id);
     }
   }, [session, status]);
 
@@ -66,7 +66,7 @@ const DonationForm = ({ childrenId }) => {
     formData.append('dona_name', donorName || "Anónimo");
     formData.append('dona_metodo', selectedPaymentMethod);
     formData.append('user_id', userId);
-    formData.append('child_id', childrenId);  // Guardamos el id del niño
+    formData.append('child_id', childrenId);
 
     try {
       const response = await fetch('/api/donations', {
@@ -95,7 +95,6 @@ const DonationForm = ({ childrenId }) => {
     }
   };
 
-  // Mostrar el formulario solo si la sesión está autenticada
   if (status === "loading") {
     return <div>Cargando sesión...</div>;
   }

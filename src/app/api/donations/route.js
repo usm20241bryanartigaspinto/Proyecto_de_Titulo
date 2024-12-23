@@ -76,7 +76,6 @@ export async function POST(request) {
       ]
     );
 
-    // Obtener el correo electrónico del usuario desde la base de datos
     const [user] = await conn.query("SELECT email FROM user WHERE id = ?", [
       data.get("user_id"),
     ]);
@@ -92,12 +91,11 @@ export async function POST(request) {
     const donationDetails = {
       dona_id: result.insertId,
       amount: data.get("dona_monto"),
-      donorEmail: user.email, // Usa el correo obtenido de la base de datos
+      donorEmail: user.email,
       message: data.get("dona_mensaje"),
       paymentMethod: data.get("dona_metodo"),
     };
 
-    // Enviar el correo de confirmación
     await sendConfirmationEmail(donationDetails);
 
     // Retornar la respuesta de éxito con los detalles de la donación

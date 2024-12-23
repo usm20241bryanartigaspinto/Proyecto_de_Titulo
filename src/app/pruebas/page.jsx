@@ -12,7 +12,6 @@ const MyComponent = () => {
     const id = session?.user?.id;
     const email = session?.user?.email;
 
-  // Verificar si la sesión está cargando
   if (status === "loading") {
     return <div>Cargando...</div>;
   }
@@ -21,10 +20,8 @@ const MyComponent = () => {
     return <div>No has iniciado sesión</div>;
   }
 
-  // Imprimir la sesión completa para depuración
   console.log("Sesión completa:", session);
 
-  // Mostrar los datos del usuario si están disponibles
   return (
     <div>
       <h3>

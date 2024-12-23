@@ -16,7 +16,7 @@ export async function POST(request) {
     if (userFound) {
       return NextResponse.json(
         {
-          message: "El correo ya está registrado", // Mensaje claro
+          message: "El correo ya está registrado",
         },
         {
           status: 400,
@@ -34,7 +34,7 @@ export async function POST(request) {
     if (usernameFound) {
       return NextResponse.json(
         {
-          message: "El usuario ya existe", // Mensaje claro
+          message: "El usuario ya existe",
         },
         {
           status: 400,
@@ -51,7 +51,7 @@ export async function POST(request) {
         username: data.username,
         email: data.email,
         password: hashedPassword,
-        rol: "No Verificado", // Otras propiedades según sea necesario
+        rol: "No Verificado",
       },
     });
 
@@ -61,10 +61,10 @@ export async function POST(request) {
     // Respuesta exitosa
     return NextResponse.json(user);
   } catch (error) {
-    // Manejo de errores generales
+    // Manejo de errores
     return NextResponse.json(
       {
-        message: error.message || "Ocurrió un error inesperado", // Maneja errores inesperados
+        message: error.message || "Ocurrió un error inesperado",
       },
       {
         status: 500,

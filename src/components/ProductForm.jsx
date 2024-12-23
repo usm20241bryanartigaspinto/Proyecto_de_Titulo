@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
-import ResidenceSelect from "./ResidenceSelect"; // Asegúrate de que este componente esté bien configurado
+import ResidenceSelect from "./ResidenceSelect";
 
 function ProductForm() {
   const [children, setChildren] = useState({
@@ -11,7 +11,7 @@ function ProductForm() {
     description: "",
     comuna: "",
     birthdate: "",
-    image: "", // Campo para la imagen existente
+    image: "",
   });
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
@@ -82,7 +82,7 @@ function ProductForm() {
     if (file) {
       formData.append("image", file);
     } else if (children.image) {
-      // Si no se seleccionó un nuevo archivo, enviar la imagen existente
+      // Si no se seleccionó un nuevo archivo, envia la imagen existente
       formData.append("image", children.image);
     }
 

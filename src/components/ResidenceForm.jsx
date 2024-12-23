@@ -18,7 +18,6 @@ function ResidenceForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Si el campo es el número telefónico, normalizar el valor
     if (name === "telefono") {
       const normalizedPhone = value.replace(/[^\d+]/g, ""); // Eliminar todo excepto dígitos y el signo "+"
       setResidence({
@@ -32,7 +31,6 @@ function ResidenceForm() {
       });
     }
 
-    // Limpiar errores al modificar el campo
     setErrors({
       ...errors,
       [name]: "",
@@ -47,7 +45,7 @@ function ResidenceForm() {
     if (!residence.telefono.trim()) newErrors.telefono = "El número telefónico es obligatorio.";
 
     // Validación del número telefónico: debe empezar con +56 y tener entre 9 y 10 dígitos después
-    const phoneRegex = /^\+56\d{9,10}$/;  // Ahora aceptamos +56 seguido de 9 o 10 dígitos
+    const phoneRegex = /^\+56\d{9,10}$/;
     if (residence.telefono && !phoneRegex.test(residence.telefono)) {
       newErrors.telefono = "El número telefónico no tiene el formato válido.";
     }
@@ -67,7 +65,7 @@ function ResidenceForm() {
     const formData = new FormData();
     formData.append("name", residence.name);
     formData.append("direccion", residence.direccion);
-    formData.append("telefono", residence.telefono);  // Aquí se envía el número normalizado
+    formData.append("telefono", residence.telefono);
     formData.append("comuna", residence.comuna);
     formData.append("image", file);
 
@@ -134,7 +132,7 @@ function ResidenceForm() {
           type="text"
           placeholder="Teléfono"
           onChange={handleChange}
-          value={residence.telefono} // Asegúrate de que el valor esté correctamente seteado
+          value={residence.telefono}
           className={`shadow appearance-none border rounded w-full py-2 px-3 ${errors.telefono ? "border-red-500" : ""}`}
         />
         {errors.telefono && <p className="text-red-500 text-xs italic">{errors.telefono}</p>}
@@ -167,7 +165,7 @@ function ResidenceForm() {
           className={`shadow appearance-none border rounded w-full py-2 px-3 ${errors.file ? "border-red-500" : ""}`}
           onChange={(e) => {
             setFile(e.target.files[0]);
-            setErrors({ ...errors, file: "" }); // Limpiar error de imagen
+            setErrors({ ...errors, file: "" });
           }}
         />
         {errors.file && <p className="text-red-500 text-xs italic">{errors.file}</p>}

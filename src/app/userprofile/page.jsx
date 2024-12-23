@@ -1,4 +1,4 @@
-'use client'; // Marcar este componente para que solo se ejecute en el cliente
+'use client';
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -7,13 +7,13 @@ const AdminUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({ username: '', email: '', rol: '' });
   const [editingUser, setEditingUser] = useState(null);
-  const [message, setMessage] = useState(''); // Estado para los mensajes
+  const [message, setMessage] = useState('');
 
   // Función para cargar usuarios
   const fetchUsers = async () => {
     try {
       const response = await axios.get('/api/users');
-      setUsers(response.data); // Establecer los usuarios obtenidos
+      setUsers(response.data);
     } catch (error) {
       console.error('Error al obtener los usuarios', error);
     }
@@ -28,39 +28,37 @@ const AdminUsersPage = () => {
     e.preventDefault();
     try {
       if (editingUser) {
-        await axios.put(`/api/users/${editingUser.id}`, formData); // Actualizar
+        await axios.put(`/api/users/${editingUser.id}`, formData);
         setMessage('Usuario actualizado correctamente');
       } else {
-        await axios.post('/api/users', formData); // Crear
+        await axios.post('/api/users', formData);
         setMessage('Usuario creado correctamente');
       }
       setFormData({ username: '', email: '', rol: '' });
       setEditingUser(null);
-      fetchUsers(); // Actualizar la lista de usuarios
+      fetchUsers(); // Actualiza la lista de usuarios
     } catch (error) {
       console.error('Error al crear o actualizar el usuario', error);
       setMessage('Hubo un error al crear o actualizar el usuario');
     }
   };
 
-  // Manejar la edición de un usuario
+
   const handleEdit = (user) => {
     setFormData({ username: user.username, email: user.email, rol: user.rol });
     setEditingUser(user);
-    // Desplazar la página hacia el formulario de edición
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
   };
 
-  // Manejar la eliminación de un usuario
+  // Maneja la eliminación de un usuario
   const handleDelete = async (userId) => {
     try {
       await axios.delete(`/api/users/${userId}`);
       setMessage('Usuario eliminado correctamente');
       fetchUsers(); // Actualizar la lista después de eliminar
-      // Desplazar la página hacia arriba después de eliminar
       window.scrollTo({
         top: 0,
         behavior: 'smooth',
@@ -85,7 +83,7 @@ const AdminUsersPage = () => {
         </div>
       )}
 
-      {/* Formulario para Crear/Actualizar Usuario */}
+      {/* Formulario para Crear o Actualizar Usuario */}
       <form onSubmit={handleCreateOrUpdate} className="bg-white p-6 rounded-lg shadow-lg">
         <div className="mb-4">
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">Nombre:</label>

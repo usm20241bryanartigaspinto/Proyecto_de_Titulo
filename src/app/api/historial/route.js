@@ -7,7 +7,7 @@ export async function GET(request) {
 
   try {
     const [rows] = await conn.query(
-      "SELECT * FROM donacion WHERE user_id = ? ORDER BY dona_fecha_hora DESC", // Asegúrate de ordenar las donaciones
+      "SELECT * FROM donacion WHERE user_id = ? ORDER BY dona_fecha_hora DESC",
       [userId]
     );
 
@@ -15,7 +15,7 @@ export async function GET(request) {
       return NextResponse.json({ message: "No se encontraron donaciones." }, { status: 404 });
     }
 
-    // Mapear los resultados de la consulta para incluir los datos relevantes
+    // Mapea los resultados de la consulta para incluir los datos relevantes
     const donations = rows.map((row) => ({
       dona_monto: row.dona_monto,
       dona_mensaje: row.dona_mensaje,

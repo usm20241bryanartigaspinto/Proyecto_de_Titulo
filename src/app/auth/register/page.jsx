@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useState } from 'react'; // Importar useState para manejar el estado de error
+import { useState } from 'react';
 
 function RegisterPage() {
   const {
@@ -9,7 +9,7 @@ function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -29,12 +29,11 @@ function RegisterPage() {
       },
     });
 
-    const result = await res.json(); // Obtenemos la respuesta de la API
+    const result = await res.json();
 
     if (res.ok) {
       router.push("/auth/login");
     } else {
-      // Si la respuesta no es ok, establecemos el mensaje de error
       setErrorMessage(result.message || 'Error al registrar el usuario');
     }
   });

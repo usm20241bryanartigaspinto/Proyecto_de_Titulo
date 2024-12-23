@@ -3,7 +3,6 @@ import { conn } from "@/libs/mysql";
 
 export async function GET() {
   try {
-      // Obtener todos los usuarios de la tabla 'user'
       const results = await conn.query("SELECT * FROM `user`");
       return NextResponse.json(results);
   } catch (error) {
@@ -17,7 +16,6 @@ export async function GET() {
 
 export async function GETRol() {
   try {
-      // Obtener todos los usuarios de la tabla 'user'
       const results = await conn.query("SELECT * FROM `rol`");
       return NextResponse.json(results);
   } catch (error) {

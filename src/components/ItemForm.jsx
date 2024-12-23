@@ -66,7 +66,7 @@ function ItemForm() {
       return;
     }
 
-    setErrors({}); // Limpiar errores si la validación pasa
+    setErrors({});
 
     const itemData = new FormData();
     itemData.append("name", item.name);

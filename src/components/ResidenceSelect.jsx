@@ -19,7 +19,7 @@ function ResidenceSelect({ value, onSelect }) {
 
   return (
     <select
-      value={value} // Aquí usamos el valor actual
+      value={value}
       onChange={(e) => onSelect(e.target.value)}
       className="shadow appearance-none border rounded w-full py-2 px-3"
     >

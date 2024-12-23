@@ -164,7 +164,6 @@ export async function PATCH(request) {
       updates.image = res.secure_url;
     }
 
-    // Actualizar en la base de datos
     await conn.query("UPDATE children SET ? WHERE id = ?", [updates, id]);
 
     return NextResponse.json({ message: "Child updated successfully" });

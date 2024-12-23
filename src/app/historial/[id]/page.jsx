@@ -1,19 +1,19 @@
 import { conn } from "@/libs/mysql";
 import DonacionCard from "@/components/DonacionCard";
 
-// Cargar las donaciones del usuario
+
 async function loadDonacion(userId) {
   try {
     const [donaciones] = await conn.query("SELECT * FROM donacion WHERE user_id = ?", [
       userId,
     ]);
-    console.log('Resultado de la consulta:', donaciones); // Verifica el resultado de la consulta
+    console.log('Resultado de la consulta:', donaciones); 
 
-    // Asegurarse de que siempre se devuelvan las donaciones como un arreglo
-    return Array.isArray(donaciones) ? donaciones : [donaciones]; // Si es un solo objeto, envolverlo en un arreglo
+
+    return Array.isArray(donaciones) ? donaciones : [donaciones];
   } catch (error) {
     console.error('Error al cargar las donaciones:', error);
-    return []; // Devolver un arreglo vacío en caso de error
+    return [];
   }
 }
 
@@ -24,8 +24,8 @@ async function DonacionPage({ params }) {
   const donaciones = await loadDonacion(params.id);
 
   console.log('Donaciones:', donaciones);
-  console.log('Es arreglo?', Array.isArray(donaciones)); // Verifica si 'donaciones' es un arreglo
-  console.log('Longitud de donaciones:', donaciones.length); // Verifica la longitud de las donaciones
+  console.log('Es arreglo?', Array.isArray(donaciones));
+  console.log('Longitud de donaciones:', donaciones.length);
 
   // Si no se encuentran donaciones o el ID no es válido, muestra un mensaje
   if (!Array.isArray(donaciones) || donaciones.length === 0) {

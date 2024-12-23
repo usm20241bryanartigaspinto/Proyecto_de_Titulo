@@ -1,11 +1,11 @@
 'use client';
 
-import DonationForm from "@/components/DonationForm"; // Asegúrate de que el formulario esté correctamente importado
+import DonationForm from "@/components/DonationForm";
 
 async function DonatePage({ params }) {
   return (
     <div>
-      <DonationForm childrenId={params.id} />  {/* Pasa el id del niño al formulario */}
+      <DonationForm childrenId={params.id} />
     </div>
   );
 }

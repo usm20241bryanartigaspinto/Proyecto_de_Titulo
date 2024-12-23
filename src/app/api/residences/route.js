@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 
 const DonationForm = () => {
-  const { data: session } = useSession(); // Obtener la sesión del usuario logueado
+  const { data: session } = useSession();
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -53,7 +53,7 @@ const DonationForm = () => {
     }
 
     const formData = new FormData();
-    formData.append('user_id', session.user.id);  // ID del usuario
+    formData.append('user_id', session.user.id);
     formData.append('dona_monto', finalAmount);
     formData.append('dona_mensaje', message);
     formData.append('dona_name', donorName || "Anónimo");
@@ -100,6 +100,7 @@ const DonationForm = () => {
         )}
 
         <div className="space-y-6">
+        
           {/* Campo de monto */}
           <div>
             <label htmlFor="amount" className="block text-lg font-medium text-gray-700">

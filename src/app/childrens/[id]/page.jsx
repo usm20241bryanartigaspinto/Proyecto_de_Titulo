@@ -43,7 +43,7 @@ async function ProductPage({ params }) {
   const items = await loadItems(params.id);
   let residence = null;
   if (children && children.resId) {
-    residence = await loadResidence(children.resId);  // Usamos resId para buscar la residencia
+    residence = await loadResidence(children.resId);
   }
 
   return (

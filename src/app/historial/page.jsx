@@ -1,52 +1,50 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react"; // Para obtener la sesión
+import { useSession } from "next-auth/react";
 import DonacionCard from "@/components/DonacionCard";
 
-// Función para cargar las donaciones del usuario desde el API Route
+// Función para cargar las donaciones del usuario
 async function loadDonaciones(userId) {
   try {
-    // Llamada al API Route con el user_id como parámetro
     const response = await fetch(`/api/donations?user_id=${userId}`);
-    
+
     // Verificar si la respuesta fue exitosa
     if (!response.ok) {
       throw new Error('No se pudieron cargar las donaciones');
     }
-    
     // Convertir la respuesta en JSON
     const data = await response.json();
     
     console.log('Donaciones cargadas desde el API:', data);
     
     // Retornar las donaciones (si hay alguna)
-    return Array.isArray(data) ? data : []; // En caso de que no sea un arreglo, devolver un arreglo vacío
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error('Error al cargar las donaciones:', error);
-    return []; // Devolver un arreglo vacío en caso de error
+    return []; // Devolver vacío en caso de error
   }
 }
 
 function DonacionPage() {
   const [donaciones, setDonaciones] = useState([]); // Estado para almacenar las donaciones
-  const { data: session } = useSession(); // Obtiene la sesión actual
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (session?.user?.id) {
       // Si la sesión está disponible y tiene un ID de usuario
       const fetchDonaciones = async () => {
-        const loadedDonaciones = await loadDonaciones(session.user.id); // Usar el ID de usuario de la sesión
-        setDonaciones(loadedDonaciones); // Establecer las donaciones en el estado
+        const loadedDonaciones = await loadDonaciones(session.user.id);
+        setDonaciones(loadedDonaciones);
       };
 
-      fetchDonaciones(); // Llamar a la función de carga de donaciones
+      fetchDonaciones();
     }
-  }, [session?.user?.id]); // Solo se ejecuta cuando cambia el ID de usuario
+  }, [session?.user?.id]);
 
   console.log('Donaciones:', donaciones);
-  console.log('Es arreglo?', Array.isArray(donaciones)); // Verifica si 'donaciones' es un arreglo
-  console.log('Longitud de donaciones:', donaciones.length); // Verifica la longitud de las donaciones
+  console.log('Es arreglo?', Array.isArray(donaciones));
+  console.log('Longitud de donaciones:', donaciones.length);
 
   return (
     <section className="flex justify-center items-center h-[calc(100vh-10rem)]">
