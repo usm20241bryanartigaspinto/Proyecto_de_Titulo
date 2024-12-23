@@ -1,12 +1,11 @@
-function DashborPage() {
-    return (
-      <div>
-        
-        <h1  color="rojo">Funcionando</h1>
+import ProductForm from "@/components/ProductForm";
 
+function NewPage() {
+  return (
+    <div className="flex justify-center items-center h-full">
+      <ProductForm />
+    </div>
+  );
+}
 
-      </div>
-    )
-  }
-  
-  export default DashborPage
+export default NewPage;

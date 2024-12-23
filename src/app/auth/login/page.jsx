@@ -26,7 +26,7 @@ function LoginPage() {
     if (res.error) {
       setError(res.error)
     } else {
-      router.push('/dashboard')
+      router.push('/')
       router.refresh()
     }
   });
@@ -39,7 +39,7 @@ function LoginPage() {
           <p className="bg-red-500 text-lg text-white p-3 rounded mb-2">{error}</p>
         )}
 
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Login</h1>
+        <h1 className=" text-gray-800 font-bold text-4xl mb-4">Login</h1>
 
         <label htmlFor="email" className="text-gray-800  font-bold mb-2 block text-sm">
           Correo:
@@ -81,9 +81,12 @@ function LoginPage() {
           </span>
         )}
 
-        <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-          Login
-        </button>
+<button
+  className="w-full text-white p-3 rounded-lg mt-2 button"
+  style={{ backgroundColor: "#447380" }}>
+  Login
+</button>
+
       </form>
     </div>
   );

@@ -1,17 +1,15 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useMediaQuery } from 'react-responsive';
-
-
+import { useState } from 'react'; // Importar useState para manejar el estado de error
 
 function RegisterPage() {
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -31,18 +29,29 @@ function RegisterPage() {
       },
     });
 
+    const result = await res.json(); // Obtenemos la respuesta de la API
+
     if (res.ok) {
       router.push("/auth/login");
+    } else {
+      // Si la respuesta no es ok, establecemos el mensaje de error
+      setErrorMessage(result.message || 'Error al registrar el usuario');
     }
   });
-  console.log(errors);
 
   return (
     <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
       <form onSubmit={onSubmit} className="w-1/4">
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Registro</h1>
+        <h1 className="text-gray-800 font-bold text-4xl mb-4">Registro</h1>
 
-        <label htmlFor="username" className="text-slate-500 mb-2 block text-sm">
+        {/* Mostrar el mensaje de error si existe */}
+        {errorMessage && (
+          <div className="text-red-500 mb-4">
+            {errorMessage}
+          </div>
+        )}
+
+        <label htmlFor="username" className="text-gray-800 mb-2 block text-sm">
           Nombre de usuario:
         </label>
         <input
@@ -56,14 +65,13 @@ function RegisterPage() {
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
           placeholder="Nombre Apellido"
         />
-
         {errors.username && (
           <span className="text-red-500 text-xs">
             {errors.username.message}
           </span>
         )}
 
-        <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
+        <label htmlFor="email" className="text-gray-800 mb-2 block text-sm">
           Correo:
         </label>
         <input
@@ -81,7 +89,7 @@ function RegisterPage() {
           <span className="text-red-500 text-xs">{errors.email.message}</span>
         )}
 
-        <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
+        <label htmlFor="password" className="text-gray-800 mb-2 block text-sm">
           Contraseña:
         </label>
         <input
@@ -103,7 +111,7 @@ function RegisterPage() {
 
         <label
           htmlFor="confirmPassword"
-          className="text-slate-500 mb-2 block text-sm"
+          className="text-gray-800 mb-2 block text-sm"
         >
           Confirmar contraseña:
         </label>
@@ -124,11 +132,14 @@ function RegisterPage() {
           </span>
         )}
 
-        <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
+        <button 
+          className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2 button"
+          style={{ backgroundColor: "#447380" }}>
           Registrarse
         </button>
       </form>
     </div>
   );
 }
+
 export default RegisterPage;
