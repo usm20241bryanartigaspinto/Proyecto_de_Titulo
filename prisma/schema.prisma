@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rol       String
+  rolRel    Rol      @relation(fields: [rol], references: [rol])
+}
+
+model Rol {
+  id    Int    @id @default(autoincrement())
+  rol   String @unique
+  users     User[]
+}
+
+model Children {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(200)
+  hogar       String    @db.VarChar(200)
+  description String?   @db.VarChar(200)
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  image       String?   @db.VarChar(200)
+  items       Item[]    
+}
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  childId     Int       // Clave foránea que referencia el modelo Children
+  name        String    @db.VarChar(200)  // Nombre del artículo
+  price       Int   // precio
+  cantidad    Int       // Cantidad del artículo solicitado
+  status      String    @db.VarChar(50)   // Estado de la solicitud ("pendiente", "entregado")
+  image       String?   @db.VarChar(200)
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+  child       Children  @relation(fields: [childId], references: [id])  // Relación muchos a uno con el modelo Children
+}
+
+model Donacion {
+  dona_id      Int      @id @default(autoincrement())
+  dona_monto   Float
+  dona_mensaje String?
+  dona_name    String
+  dona_metodo  String
+  user_id      Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

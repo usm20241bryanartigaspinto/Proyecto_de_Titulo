@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.common_style>section {
+    padding: 50px 0;
+  }
+
+  .common_style h3 {
+    margin: 10px 0 40px 0;
+    max-width: 800px; 
+    font-weight: 950;
+    color: #151516;
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: justify;
+    
+  }
+  
+  .common_style p {
+    font-weight: 700;
+    margin: 10px 0 10px 0;
+    text-align: justify;
+    display: block; 
+    max-width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+  
+  .common_style li {
+    text-align: justify;
+  }
+
+  .common_style img {
+    width: 25%;
+    margin-left: auto; 
+    margin-right: auto; 
+  }
+
+  .about_section {
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; 
+  }
+  
+  .about_section a {
+    margin: 10px;
+    background-color: #447380;
+    color: #fefeff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-block;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+/*sombra botones home  */
+
+  .btn:hover {
+    background-color: #869EA6;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+        max-width: 1250px;
+    }
+
+}
+
+.navbar {
+  background-color: #447380;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding-left: 6rem;
+  padding-right: 6rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+
+body {
+  background-color: #C4F1FE;
+}
+
+h1 {
+  color: rgb(255, 255, 255);
+}
+
+/*Botón Navbar  */
+.button {
+  display: inline-block;
+  padding: 10px 20px; 
+  margin: 1px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  background-color: #95B6BF;
+  color: #000;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.button:hover {
+  background-color: #869EA6;
+  color: #fff;
+}
+
+/* DONACION */
+/* DONACION */
+/* DONACION */
+
+.donation-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.donation-amounts,
+.payment-selection {
+  width: 48%;
+  justify-items: center;
+}
+
+.donation-amounts h2,
+.payment-selection h2 {
+  margin-bottom: 10px;
+}
+
+.donation-amounts {
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.amount-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.amount-buttons button {
+  flex: 1 0 calc(33.33% - 10px); 
+  margin: 6px; 
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+
+.donation-amounts button:focus,
+.donation-amounts button:hover {
+  background-color: #d0e7ff;
+}
+
+.donation-amounts input {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.donation-message label,
+.donor-name label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.donation-message textarea,
+.donor-name input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.payment-selection h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.payment-selection button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.payment-selection button:focus,
+.payment-selection button:hover {
+  background-color: #d0e7ff;
+}
