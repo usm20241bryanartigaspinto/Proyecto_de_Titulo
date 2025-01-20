@@ -1,230 +1,173 @@
-"use client";
-import React, { useState } from "react";
-import { useSession } from "next-auth/react";
+import { NextResponse } from "next/server";
+import { conn } from "@/libs/mysql";
+import cloudinary from "@/libs/cloudinary";
+import { processImage } from "@/libs/processImage";
 
-const DonationForm = () => {
-  const { data: session } = useSession();
-  const [amount, setAmount] = useState("");
-  const [customAmount, setCustomAmount] = useState("");
-  const [message, setMessage] = useState("");
-  const [donorName, setDonorName] = useState("Anónimo");
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  const [selectedAmount, setSelectedAmount] = useState("");
-  const [error, setError] = useState("");
+cloudinary.config({
+  cloud_name: "dy1iyu66l",
+  api_key: "255846268365625",
+  api_secret: "VMraW8Xn_yJpO8H3GwtbwDd6_as",
+});
 
-  const handleAmountClick = (value) => {
-    setAmount(value);
-    setCustomAmount("");
-    setSelectedAmount(value);
-    setError("");
-  };
+export async function GET() {
+  try {
+    const results = await conn.query(`
+      SELECT * FROM residence
+    `);
 
-  const handleCustomAmountChange = (e) => {
-    const value = e.target.value;
-    setAmount("");
-    setCustomAmount(value);
-    setSelectedAmount("");
-    setError("");
-  };
-
-  const handlePaymentMethodSelection = (method) => {
-    setSelectedPaymentMethod(method);
-    setError("");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const finalAmount = customAmount || amount;
-
-    if (!finalAmount || finalAmount < 1000) {
-      setError("El monto debe ser al menos $1,000.");
-      return;
+    if (results.length === 0) {
+      return NextResponse.json(
+        { message: "No residences found" },
+        { status: 404 }
+      );
     }
 
-    if (!selectedPaymentMethod) {
-      setError("Por favor, selecciona un método de pago.");
-      return;
+    return NextResponse.json(results);
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request) {
+  try {
+    const data = await request.formData();
+    const image = data.get("image");
+
+    // Validaciones
+    if (!data.get("name")) {
+      return NextResponse.json(
+        { message: "Residence name is required" },
+        { status: 400 }
+      );
     }
 
-    if (!session?.user?.id) {
-      setError("No se ha encontrado un usuario logueado.");
-      return;
+    if (!data.get("direccion")) {
+      return NextResponse.json(
+        { message: "Address is required" },
+        { status: 400 }
+      );
     }
 
-    const formData = new FormData();
-    formData.append('user_id', session.user.id);
-    formData.append('dona_monto', finalAmount);
-    formData.append('dona_mensaje', message);
-    formData.append('dona_name', donorName || "Anónimo");
-    formData.append('dona_metodo', selectedPaymentMethod);
+    if (!data.get("telefono")) {
+      return NextResponse.json(
+        { message: "Phone number is required" },
+        { status: 400 }
+      );
+    }
 
-    try {
-      const response = await fetch('/api/donations', {
-        method: 'POST',
-        body: formData,
+    const telefono = data.get("telefono");
+    // Validación de teléfono: debe empezar con +56 y tener entre 9 y 10 dígitos
+    const phoneRegex = /^\+56\d{9,10}$/;
+    if (!phoneRegex.test(telefono)) {
+      return NextResponse.json(
+        { message: "Invalid phone number format" },
+        { status: 400 }
+      );
+    }
+
+    if (!data.get("comuna")) {
+      return NextResponse.json(
+        { message: "Comuna is required" },
+        { status: 400 }
+      );
+    }
+
+    // Procesar imagen
+    const buffer = await processImage(image);
+
+    const res = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          { resource_type: "image" },
+          async (err, result) => {
+            if (err) {
+              console.log(err);
+              reject(err);
+            }
+            resolve(result);
+          }
+        )
+        .end(buffer);
+    });
+
+    // Insertar en la base de datos
+    const result = await conn.query("INSERT INTO residence SET ?", {
+      name: data.get("name"),
+      direccion: data.get("direccion"),
+      telefono: telefono,
+      comuna: data.get("comuna"),
+      image: res.secure_url,
+    });
+
+    return NextResponse.json({
+      name: data.get("name"),
+      direccion: data.get("direccion"),
+      telefono: telefono,
+      comuna: data.get("comuna"),
+      image: res.secure_url,
+      id: result.insertId,
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    return NextResponse.json(
+      { message: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request) {
+  try {
+    const data = await request.formData();
+    const id = data.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "ID is required for updating" },
+        { status: 400 }
+      );
+    }
+
+    const updates = {};
+    if (data.get("name")) updates.name = data.get("name");
+    if (data.get("direccion")) updates.direccion = data.get("direccion");
+    if (data.get("telefono")) updates.telefono = data.get("telefono");
+    if (data.get("comuna")) updates.comuna = data.get("comuna");
+
+    if (data.get("image")) {
+      const image = data.get("image");
+      const buffer = await processImage(image);
+
+      const res = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            { resource_type: "image" },
+            async (err, result) => {
+              if (err) {
+                console.log(err);
+                reject(err);
+              }
+              resolve(result);
+            }
+          )
+          .end(buffer);
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.error || "Error al procesar la donación.");
-        return;
-      }
-
-      alert("¡Gracias por tu donación!");
-      setAmount("");
-      setCustomAmount("");
-      setMessage("");
-      setDonorName("Anónimo");
-      setSelectedPaymentMethod("");
-      setSelectedAmount("");
-      setError("");
-    } catch (error) {
-      console.error('Error al enviar la donación:', error);
-      setError("Error al enviar la donación. Intenta nuevamente.");
+      updates.image = res.secure_url;
     }
-  };
 
-  return (
-    <div className="flex justify-center items-center mt-3">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg"
-      >
-        <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          Formulario de Donación
-        </h1>
+    await conn.query("UPDATE residence SET ? WHERE id = ?", [updates, id]);
 
-        {error && (
-          <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
-        )}
-
-        <div className="space-y-6">
-        
-          {/* Campo de monto */}
-          <div>
-            <label htmlFor="amount" className="block text-lg font-medium text-gray-700">
-              Monto de la Donación
-            </label>
-            <div className="flex space-x-4 mt-2">
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedAmount === "1000" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handleAmountClick("1000")}
-              >
-                $1,000
-              </button>
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedAmount === "2000" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handleAmountClick("2000")}
-              >
-                $2,000
-              </button>
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedAmount === "5000" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handleAmountClick("5000")}
-              >
-                $5,000
-              </button>
-            </div>
-            <input
-              type="number"
-              id="customAmount"
-              value={customAmount}
-              onChange={handleCustomAmountChange}
-              className="mt-2 w-full px-4 py-2 border rounded-md"
-              placeholder="Monto personalizado"
-            />
-          </div>
-
-          {/* Campo de mensaje */}
-          <div>
-            <label htmlFor="message" className="block text-lg font-medium text-gray-700">
-              Mensaje (Opcional)
-            </label>
-            <textarea
-              id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="mt-2 w-full px-4 py-2 border rounded-md"
-              placeholder="Escribe un mensaje para el destinatario"
-            />
-          </div>
-
-          {/* Campo de nombre del donante */}
-          <div>
-            <label htmlFor="donorName" className="block text-lg font-medium text-gray-700">
-              Nombre del Donante
-            </label>
-            <input
-              type="text"
-              id="donorName"
-              value={donorName}
-              onChange={(e) => setDonorName(e.target.value)}
-              className="mt-2 w-full px-4 py-2 border rounded-md"
-              placeholder="Nombre del donante"
-            />
-          </div>
-
-          {/* Métodos de pago */}
-          <div>
-            <label className="block text-lg font-medium text-gray-700">Método de pago</label>
-            <div className="flex space-x-4 mt-2">
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedPaymentMethod === "tarjeta" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handlePaymentMethodSelection("tarjeta")}
-              >
-                Tarjeta
-              </button>
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedPaymentMethod === "mercadoPago" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handlePaymentMethodSelection("mercadoPago")}
-              >
-                Mercado Pago
-              </button>
-              <button
-                type="button"
-                className={`py-2 px-4 bg-[#447380] text-white rounded-md ${
-                  selectedPaymentMethod === "webpay" ? "bg-[#95B6BF]" : ""
-                }`}
-                onClick={() => handlePaymentMethodSelection("webpay")}
-              >
-                Webpay
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <button
-              type="submit"
-              className={`w-full py-3 text-white font-semibold rounded-md transition duration-300 ${
-                !selectedPaymentMethod || (!customAmount && !amount)
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#447380] hover:bg-[#95B6BF]"
-              }`}
-              disabled={!selectedPaymentMethod || (!customAmount && !amount)}
-            >
-              Donar
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  );
-};
-
-export default DonationForm;
+    return NextResponse.json({ message: "Residence updated successfully" });
+  } catch (error) {
+    console.error("Error:", error.message);
+    return NextResponse.json(
+      { message: error.message },
+      { status: 500 }
+    );
+  }
+}

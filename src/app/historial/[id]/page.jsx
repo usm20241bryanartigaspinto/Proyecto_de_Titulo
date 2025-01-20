@@ -1,15 +1,14 @@
 import { conn } from "@/libs/mysql";
 import DonacionCard from "@/components/DonacionCard";
 
-
 async function loadDonacion(userId) {
   try {
     const [donaciones] = await conn.query("SELECT * FROM donacion WHERE user_id = ?", [
       userId,
     ]);
-    console.log('Resultado de la consulta:', donaciones); 
+    console.log('Resultado de la consulta:', donaciones);
 
-
+    // Retorna un array vacío si donaciones es undefined o no es un array
     return Array.isArray(donaciones) ? donaciones : [donaciones];
   } catch (error) {
     console.error('Error al cargar las donaciones:', error);
@@ -27,8 +26,8 @@ async function DonacionPage({ params }) {
   console.log('Es arreglo?', Array.isArray(donaciones));
   console.log('Longitud de donaciones:', donaciones.length);
 
-  // Si no se encuentran donaciones o el ID no es válido, muestra un mensaje
-  if (!Array.isArray(donaciones) || donaciones.length === 0) {
+  // Si no se encuentran donaciones, muestra un mensaje
+  if (donaciones.length === 0) {
     return (
       <section className="flex flex-col justify-start items-center pt-10">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Historial de Donaciones</h2>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const DonationForm = ({ childrenId }) => {
   const { data: session, status } = useSession();
@@ -11,8 +12,8 @@ const DonationForm = ({ childrenId }) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const [selectedAmount, setSelectedAmount] = useState("");
   const [error, setError] = useState("");
-  
   const [userId, setUserId] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -81,7 +82,8 @@ const DonationForm = ({ childrenId }) => {
       }
 
       alert("¡Gracias por tu donación!");
-      
+      router.push('/childrens');
+
       setAmount("");
       setCustomAmount("");
       setMessage("");

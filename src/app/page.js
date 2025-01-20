@@ -60,7 +60,7 @@ function HomePage() {
               Hogares
             </a>
 
-            <a href={`historial?user_id=${id}`} className="btn">
+            <a href={`historial/${id}`} className="btn">
               Historial de donaciones
             </a>
 
